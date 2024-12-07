@@ -1,3 +1,3 @@
 export default function Popup() {
-  return <></>;
+  return <div>This is a test.</div>;
 }

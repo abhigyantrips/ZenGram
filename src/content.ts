@@ -5,14 +5,12 @@ import { defaultOptions, labelsArray, selectors, urls } from "@/config/content";
 
 export const config: PlasmoCSConfig = {
   matches: ["*://www.instagram.com/*"],
-  all_frames: true,
   run_at: "document_start",
 };
 
 // Initialize settings with default values
 let settings = defaultOptions;
 
-// Function to initialize storage
 function initializeStorage() {
   console.log("Initializing Storage");
 
@@ -72,16 +70,13 @@ function initializeStorage() {
         settings = loadedSettings;
         console.log("Settings updated:", settings);
       }
-
-      // Start observing after settings are loaded
-      startObserver();
-      console.log("Started Observer");
     })
     .catch((error) => {
       console.error("Error in loadSettingsPromise:", error);
       // Start observer with default settings if there's an error
+    })
+    .finally(() => {
       startObserver();
-      console.log("Started Observer with default settings due to error");
     });
 }
 
