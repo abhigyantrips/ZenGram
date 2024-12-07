@@ -3,81 +3,100 @@ import type { PlasmoCSConfig } from "plasmo";
 
 import { defaultOptions, labelsArray, selectors, urls } from "@/config/content";
 
+import { extensionConfig } from "./config/ext";
+
 export const config: PlasmoCSConfig = {
   matches: ["*://www.instagram.com/*"],
   run_at: "document_start",
 };
 
-// Initialize settings with default values
 let settings = defaultOptions;
+const mutationObserver = new MutationObserver(onMutation);
+
+initializeStorage();
 
 function initializeStorage() {
-  console.log("Initializing Storage");
-
   const loadSettingsPromise = new Promise<ContentSettings>(
     (resolve, reject) => {
-      if (process.env.PLASMO_BROWSER === "chrome") {
-        chrome.storage.sync.get(labelsArray, (result) => {
-          if (chrome.runtime.lastError) {
-            console.error("Chrome storage error:", chrome.runtime.lastError);
-            reject(chrome.runtime.lastError);
-          } else {
-            resolve(result as ContentSettings);
-          }
-        });
-      } else if (process.env.PLASMO_BROWSER === "firefox") {
-        browser.storage.sync
-          .get(labelsArray)
-          .then(resolve)
-          .catch((error) => {
-            console.error("Firefox storage error:", error);
-            reject(error);
+      switch (process.env.PLASMO_BROWSER) {
+        case "chrome":
+          chrome.storage.sync.get(labelsArray, (result) => {
+            if (chrome.runtime.lastError) {
+              console.error(
+                `${extensionConfig.name} | Chrome storage error:`,
+                chrome.runtime.lastError
+              );
+              reject(chrome.runtime.lastError);
+            } else {
+              resolve(result as ContentSettings);
+            }
           });
-      } else {
-        console.error("Unknown browser environment");
-        reject(new Error("Unknown browser environment"));
+          break;
+        case "firefox":
+          browser.storage.sync
+            .get(labelsArray)
+            .then(resolve)
+            .catch((error) => {
+              console.error(
+                `${extensionConfig.name} | Chrome storage error:`,
+                error
+              );
+              reject(error);
+            });
+          break;
       }
     }
   );
 
   loadSettingsPromise
     .then((loadedSettings) => {
-      console.log("Settings loaded:", loadedSettings);
+      // Set default options if no settings are found
       if (Object.keys(loadedSettings).length === 0) {
-        console.log("No settings found, using defaults");
-        // Set default options if no settings are found
-        if (process.env.PLASMO_BROWSER === "chrome") {
-          chrome.storage.sync.set(defaultOptions, () => {
-            if (chrome.runtime.lastError) {
-              console.error(
-                "Error setting default options:",
-                chrome.runtime.lastError
+        switch (process.env.PLASMO_BROWSER) {
+          case "chrome":
+            chrome.storage.sync.set(defaultOptions, () => {
+              if (chrome.runtime.lastError) {
+                console.error(
+                  `${extensionConfig.name} | Error setting default options:`,
+                  chrome.runtime.lastError
+                );
+              }
+            });
+            break;
+          case "firefox":
+            browser.storage.sync
+              .set(defaultOptions)
+              .catch((error) =>
+                console.error(
+                  `${extensionConfig.name} | Error setting default options:`,
+                  error
+                )
               );
-            } else {
-              console.log("Default options set for Chrome");
-            }
-          });
-        } else if (process.env.PLASMO_BROWSER === "firefox") {
-          browser.storage.sync
-            .set(defaultOptions)
-            .then(() => console.log("Default options set for Firefox"))
-            .catch((error) =>
-              console.error("Error setting default options:", error)
-            );
+            break;
         }
       } else {
-        // Update settings with loaded values
         settings = loadedSettings;
-        console.log("Settings updated:", settings);
+        console.log(`${extensionConfig.name} | Settings loaded:`, settings);
       }
     })
     .catch((error) => {
-      console.error("Error in loadSettingsPromise:", error);
-      // Start observer with default settings if there's an error
+      console.error(
+        `${extensionConfig.name} | Error while loading settings:`,
+        error
+      );
     })
     .finally(() => {
       startObserver();
     });
+}
+
+function startObserver() {
+  mutationObserver.observe(document, {
+    subtree: true,
+    childList: true,
+  });
+
+  onMutation();
 }
 
 function onMutation() {
@@ -133,24 +152,5 @@ function onMutation() {
     storiesSection?.remove();
   }
 }
-
-const mutationObserver = new MutationObserver(onMutation);
-
-function startObserver() {
-  mutationObserver.observe(document, {
-    subtree: true,
-    childList: true,
-  });
-
-  // Initial check
-  onMutation();
-
-  console.log("Reached Observer Start");
-}
-
-// Initialize the extension
-initializeStorage();
-
-console.log("Initial settings:", settings);
 
 export {};
