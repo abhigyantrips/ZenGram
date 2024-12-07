@@ -1,5 +1,5 @@
 import type { DefaultOptions as ContentSettings } from "@/types/content";
-import type { PlasmoCSConfig } from 'plasmo';
+import type { PlasmoCSConfig } from "plasmo";
 
 import { defaultOptions, labelsArray, selectors, urls } from "@/config/content";
 
@@ -16,28 +16,31 @@ let settings = defaultOptions;
 function initializeStorage() {
   console.log("Initializing Storage");
 
-  const loadSettingsPromise = new Promise<ContentSettings>((resolve, reject) => {
-    if (process.env.PLASMO_BROWSER === "chrome") {
-      chrome.storage.sync.get(labelsArray, (result) => {
-        if (chrome.runtime.lastError) {
-          console.error("Chrome storage error:", chrome.runtime.lastError);
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve(result as ContentSettings);
-        }
-      });
-    } else if (process.env.PLASMO_BROWSER === "firefox") {
-      browser.storage.sync.get(labelsArray)
-        .then(resolve)
-        .catch((error) => {
-          console.error("Firefox storage error:", error);
-          reject(error);
+  const loadSettingsPromise = new Promise<ContentSettings>(
+    (resolve, reject) => {
+      if (process.env.PLASMO_BROWSER === "chrome") {
+        chrome.storage.sync.get(labelsArray, (result) => {
+          if (chrome.runtime.lastError) {
+            console.error("Chrome storage error:", chrome.runtime.lastError);
+            reject(chrome.runtime.lastError);
+          } else {
+            resolve(result as ContentSettings);
+          }
         });
-    } else {
-      console.error("Unknown browser environment");
-      reject(new Error("Unknown browser environment"));
+      } else if (process.env.PLASMO_BROWSER === "firefox") {
+        browser.storage.sync
+          .get(labelsArray)
+          .then(resolve)
+          .catch((error) => {
+            console.error("Firefox storage error:", error);
+            reject(error);
+          });
+      } else {
+        console.error("Unknown browser environment");
+        reject(new Error("Unknown browser environment"));
+      }
     }
-  });
+  );
 
   loadSettingsPromise
     .then((loadedSettings) => {
@@ -48,15 +51,21 @@ function initializeStorage() {
         if (process.env.PLASMO_BROWSER === "chrome") {
           chrome.storage.sync.set(defaultOptions, () => {
             if (chrome.runtime.lastError) {
-              console.error("Error setting default options:", chrome.runtime.lastError);
+              console.error(
+                "Error setting default options:",
+                chrome.runtime.lastError
+              );
             } else {
               console.log("Default options set for Chrome");
             }
           });
         } else if (process.env.PLASMO_BROWSER === "firefox") {
-          browser.storage.sync.set(defaultOptions)
+          browser.storage.sync
+            .set(defaultOptions)
             .then(() => console.log("Default options set for Firefox"))
-            .catch((error) => console.error("Error setting default options:", error));
+            .catch((error) =>
+              console.error("Error setting default options:", error)
+            );
         }
       } else {
         // Update settings with loaded values
@@ -98,14 +107,20 @@ function onMutation() {
     settings.blockPosts && postsContainer?.remove();
     settings.blockPosts && postsLoader?.remove();
 
-    // Remove suggested followers
-    const suggestedFollowersLink = body?.querySelector(
-      selectors.sidebar.suggestedFollowers
-    );
-    const suggestedFollowersTitle = suggestedFollowersLink?.closest("div");
-    const suggestedFollowers = suggestedFollowersTitle?.nextElementSibling;
-    settings.blockSidebar === "suggested" && suggestedFollowers?.remove();
-    settings.blockSidebar === "suggested" && suggestedFollowersTitle?.remove();
+    // Remove sidebar / suggested followers
+    if (settings.blockSidebar === true) {
+      const sidebarBase = body?.querySelector(selectors.sidebar.base);
+      const sidebar = sidebarBase?.nextElementSibling;
+      sidebar.remove();
+    } else if (settings.blockSidebar === "suggested") {
+      const suggestedFollowersLink = body?.querySelector(
+        selectors.sidebar.suggestedFollowers
+      );
+      const suggestedFollowersTitle = suggestedFollowersLink?.closest("div");
+      const suggestedFollowers = suggestedFollowersTitle?.nextElementSibling;
+      suggestedFollowers?.remove();
+      suggestedFollowersTitle?.remove();
+    }
   }
 
   if (path.includes(urls.reels) && settings.blockReels) {

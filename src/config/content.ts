@@ -4,8 +4,8 @@ export const defaultOptions: DefaultOptions = {
   blockStories: true,
   blockReels: true,
   blockExplore: true,
-  blockPosts: "suggested",
-  blockSidebar: 'suggested',
+  blockPosts: false,
+  blockSidebar: true,
 };
 
 export const labelsArray = Object.keys(defaultOptions);
@@ -18,7 +18,7 @@ export const selectors: Selectors = {
     loader: "[data-visualcompletion='loading-state']",
   },
   sidebar: {
-    base: "",
+    base: "div[style*='max-width: 630px; width: 100%;']",
     suggestedFollowers: "a[href*='/explore/people/']",
   },
   nav: {
