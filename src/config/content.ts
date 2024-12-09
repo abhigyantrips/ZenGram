@@ -1,10 +1,10 @@
 import type { DefaultOptions, Selectors, URLs } from "@/types/content";
 
 export const defaultOptions: DefaultOptions = {
-  blockStories: true,
+  blockStories: false,
   blockReels: true,
   blockExplore: true,
-  blockPosts: false,
+  blockPosts: "suggested",
   blockSidebar: true,
 };
 

@@ -1,5 +1,6 @@
 export type ExtensionConfig = typeof extensionConfig;
 
 export const extensionConfig = {
-	name: 'ZenGram',
-}
+  name: "ZenGram",
+  source: "https://github.com/abhigyantrips/zen-gram",
+};
