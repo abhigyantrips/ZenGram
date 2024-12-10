@@ -1,7 +1,5 @@
 import { defineConfig } from "wxt";
 
-import { extensionConfig } from "@/config/ext";
-
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   srcDir: "src",
