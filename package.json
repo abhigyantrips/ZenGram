@@ -1,6 +1,6 @@
 {
   "name": "zengram",
-  "displayName": "Zen Gram",
+  "displayName": "ZenGram",
   "version": "0.0.1",
   "description": "A selective blocker for Instagram.",
   "author": "Abhigyan Trips <contact@abhigyantrips.dev>",
@@ -31,6 +31,7 @@
     "@types/chrome": "^0.0.280",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@wxt-dev/auto-icons": "^1.0.2",
     "@wxt-dev/module-react": "^1.1.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

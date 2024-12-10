@@ -7,9 +7,11 @@ export default defineConfig({
     disabled: true,
   },
   extensionApi: "chrome",
-  modules: ["@wxt-dev/module-react"],
+
+  modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
 
   manifest: {
+    name: "ZenGram",
     permissions: ["storage"],
     browser_specific_settings: {
       gecko: {
