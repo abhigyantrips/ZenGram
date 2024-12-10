@@ -9,7 +9,6 @@ export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-react"],
 
-  manifestVersion: 3,
   manifest: {
     permissions: ["storage"],
     browser_specific_settings: {
