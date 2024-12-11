@@ -2,15 +2,23 @@ import type { DefaultOptions as ContentSettings } from "@/types/content";
 
 import { defaultOptions, labelsArray, selectors, urls } from "@/config/content";
 import { extensionConfig } from "@/config/ext";
+import { isExtensionEnabled } from "@/lib/storage";
 
 export default defineContentScript({
   matches: ["*://www.instagram.com/*"],
   runAt: "document_start",
-  main() {
+  async main() {
+    const isEnabled = await isExtensionEnabled.getValue();
+
+    if (!isEnabled) {
+      console.log(`${extensionConfig.name} | Extension disabled. Exiting...`);
+      return;
+    } else {
+      initializeStorage();
+    }
+
     let settings = defaultOptions;
     const mutationObserver = new MutationObserver(onMutation);
-
-    initializeStorage();
 
     function initializeStorage() {
       const loadSettingsPromise = new Promise<ContentSettings>(
