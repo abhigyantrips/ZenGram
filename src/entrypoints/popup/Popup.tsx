@@ -1,6 +1,6 @@
 "use client";
 
-import { Bolt, Settings } from "lucide-react";
+import { Bolt } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import extLogo from "/logo.svg";
 
 function Popup() {
-  const [enabled, setEnabled] = React.useState<boolean | null>(null);
+  const [enabled, setEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
     (async () => {

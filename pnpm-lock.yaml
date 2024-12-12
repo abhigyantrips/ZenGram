@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/cookie':
+        specifier: ^5.1.0
+        version: 5.1.0
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.14)(react@18.3.1)
@@ -476,6 +479,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource/cookie@5.1.0':
+    resolution: {integrity: sha512-YaLI4bdEbzcnbqPL70hztT/dRY6/B9/I+D4cyFHmIfZM/qh+PSk0URk+82GjKjTiHeWUq3s9NupUmRVFE4SUfg==}
 
   '@ianvs/prettier-plugin-sort-imports@4.4.0':
     resolution: {integrity: sha512-f4/e+/ANGk3tHuwRW0uh2YuBR50I4h1ZjGQ+5uD8sWfinHTivQsnieR5cz24t8M6Vx4rYvZ5v/IEKZhYpzQm9Q==}
@@ -3150,6 +3156,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.24.0':
     optional: true
+
+  '@fontsource/cookie@5.1.0': {}
 
   '@ianvs/prettier-plugin-sort-imports@4.4.0(prettier@3.4.2)':
     dependencies:
