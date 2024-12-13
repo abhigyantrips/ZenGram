@@ -7,6 +7,7 @@ import { isExtensionEnabled } from "@/lib/storage";
 export default defineContentScript({
   matches: ["*://www.instagram.com/*"],
   runAt: "document_start",
+
   async main() {
     const isEnabled = await isExtensionEnabled.getValue();
 
