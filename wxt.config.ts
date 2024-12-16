@@ -13,6 +13,7 @@ export default defineConfig({
   manifest: {
     name: "ZenGram",
     permissions: ["storage"],
+    host_permissions: ["*://www.instagram.com/*"],
     browser_specific_settings: {
       gecko: {
         id: "zengram@abhigyantrips.dev",

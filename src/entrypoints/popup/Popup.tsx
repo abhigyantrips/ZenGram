@@ -37,7 +37,10 @@ function Popup() {
     <>
       <div className="flex min-h-[200px] w-[300px] flex-col items-center bg-background p-2">
         <div className="absolute right-2 top-2">
-          <Button size="icon" variant="ghost" onClick={() => toggleExtension()}>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => browser.runtime.openOptionsPage()}>
             <Bolt />
           </Button>
         </div>
