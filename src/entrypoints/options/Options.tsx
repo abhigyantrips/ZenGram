@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import { ExtensionControls } from "@/components/extension-controls";
 import { Header } from "@/components/header";
 
 import "@/styles/globals.css";
-
-import { Button } from "@/components/ui/button";
 
 function Options() {
   return (
@@ -13,21 +12,14 @@ function Options() {
       <div className="relative flex flex-col bg-background font-sans antialiased">
         <Header />
         <div className="container flex-1">
-          <div className="mx-auto flex min-h-[calc(100vh_-_theme(spacing.32))] max-w-screen-md flex-col gap-2 p-6">
-            <Button
-              onClick={() => {
-                browser.tabs
-                  .query({ url: "*://www.instagram.com/*" })
-                  .then((tabs) => {
-                    for (const tab of tabs) {
-                      browser.tabs.sendMessage(tab.id!, {
-                        type: "EXT_SETTINGS_UPDATED",
-                      });
-                    }
-                  });
-              }}>
-              Save
-            </Button>
+          <div className="mx-auto flex min-h-[calc(100vh_-_theme(spacing.32))] max-w-screen-md flex-col space-y-6 p-6">
+            <div className="flex flex-col space-y-2 pt-24">
+              <h1 className="text-3xl font-semibold">extension controls.</h1>
+              <p className="text-gray-500">
+                control your Instagram experience with ease.
+              </p>
+            </div>
+            <ExtensionControls />
           </div>
         </div>
       </div>

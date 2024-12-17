@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 
 import "@/styles/globals.css";
 
-import { isExtensionEnabled } from "@/lib/storage";
-import { cn } from "@/lib/utils";
+import { isExtensionEnabled } from "@/utils/storage";
+import { cn } from "@/utils/utils";
 
 import extLogo from "/logo.svg";
 

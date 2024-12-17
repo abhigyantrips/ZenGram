@@ -2,7 +2,7 @@ import type { DefaultOptions as ContentSettings } from "@/types/content";
 
 import { defaultOptions, labelsArray, selectors, urls } from "@/config/content";
 import { extensionConfig } from "@/config/ext";
-import { isExtensionEnabled } from "@/lib/storage";
+import { isExtensionEnabled } from "@/utils/storage";
 
 export default defineContentScript({
   matches: ["*://www.instagram.com/*"],
