@@ -1,4 +1,5 @@
 export type DefaultOptions = {
+  redirectMode: "none" | "following" | "messages";
   blockStories: boolean;
   blockReels: boolean;
   blockExplore: boolean;

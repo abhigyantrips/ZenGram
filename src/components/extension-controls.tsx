@@ -27,32 +27,41 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { updateTabsOnSave } from "@/utils/messaging";
 
-const FormSchema = z.object({
+const formSchema = z.object({
   enableExtension: z.boolean().default(false),
   redirectMode: z.enum(["none", "following", "messages"]).default("none"),
   blockStories: z.boolean().default(false),
   blockReels: z.boolean().default(false),
   blockExplore: z.boolean().default(false),
-  blockPosts: z.enum(["yes", "no", "suggested"]).default("no"),
-  blockSidebar: z.enum(["yes", "no", "suggested"]).default("no"),
+  blockPosts: z.union([z.boolean(), z.literal("suggested")]).default(false),
+  blockSidebar: z.union([z.boolean(), z.literal("suggested")]).default(false),
 });
 
 export function ExtensionControls() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       enableExtension: false,
       redirectMode: "none",
       blockStories: false,
       blockReels: false,
       blockExplore: false,
-      blockPosts: "no",
-      blockSidebar: "no",
+      blockPosts: false,
+      blockSidebar: false,
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof formSchema>) {
     const extensionOptions = { ...data } as DefaultOptions;
+    // Convert "yes" and "no" to boolean values
+    extensionOptions.blockPosts =
+      extensionOptions.blockPosts === "suggested"
+        ? "suggested"
+        : Boolean(extensionOptions.blockPosts);
+    extensionOptions.blockSidebar =
+      extensionOptions.blockSidebar === "suggested"
+        ? "suggested"
+        : Boolean(extensionOptions.blockSidebar);
 
     browser.storage.sync.set(extensionOptions);
   }
@@ -202,15 +211,21 @@ export function ExtensionControls() {
                   control which posts appear in your feed
                 </FormDescription>
               </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(value) =>
+                  field.onChange(
+                    value === "true" ? true : value === "false" ? false : value
+                  )
+                }
+                defaultValue={String(field.value)}>
                 <FormControl>
                   <SelectTrigger className="!mt-0 max-w-48">
                     <SelectValue placeholder="select a block posts option" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="yes">yes</SelectItem>
-                  <SelectItem value="no">no</SelectItem>
+                  <SelectItem value="true">yes</SelectItem>
+                  <SelectItem value="false">no</SelectItem>
                   <SelectItem value="suggested">
                     suggested posts only
                   </SelectItem>
@@ -233,15 +248,21 @@ export function ExtensionControls() {
                   customize the visibility of the sidebar content
                 </FormDescription>
               </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(value) =>
+                  field.onChange(
+                    value === "true" ? true : value === "false" ? false : value
+                  )
+                }
+                defaultValue={String(field.value)}>
                 <FormControl>
                   <SelectTrigger className="!mt-0 max-w-48">
                     <SelectValue placeholder="select a block sidebar option" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="yes">yes</SelectItem>
-                  <SelectItem value="no">no</SelectItem>
+                  <SelectItem value="true">yes</SelectItem>
+                  <SelectItem value="false">no</SelectItem>
                   <SelectItem value="suggested">
                     suggested followers only
                   </SelectItem>

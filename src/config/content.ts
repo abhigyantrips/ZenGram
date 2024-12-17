@@ -1,6 +1,7 @@
 import type { DefaultOptions, Selectors, URLs } from "@/types/content";
 
 export const defaultOptions: DefaultOptions = {
+  redirectMode: "none",
   blockStories: false,
   blockReels: true,
   blockExplore: true,
