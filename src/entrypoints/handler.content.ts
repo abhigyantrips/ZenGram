@@ -11,14 +11,14 @@ export default defineContentScript({
   async main() {
     const options = await extensionOptions.getValue();
 
+    const mutationObserver = new MutationObserver(onMutation);
+
     if (!options.enabled) {
       console.log(`${extensionConfig.name} | Extension disabled. Exiting...`);
       return;
     } else {
       startObserver();
     }
-
-    const mutationObserver = new MutationObserver(onMutation);
 
     function startObserver() {
       mutationObserver.observe(document, {
