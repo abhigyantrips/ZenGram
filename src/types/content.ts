@@ -1,4 +1,5 @@
-export type DefaultOptions = {
+export type ExtensionOptions = {
+  enabled: boolean;
   redirectMode: "none" | "following" | "messages";
   blockStories: boolean;
   blockReels: boolean;

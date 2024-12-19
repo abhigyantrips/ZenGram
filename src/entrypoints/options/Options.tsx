@@ -6,6 +6,8 @@ import { Header } from "@/components/header";
 
 import "@/styles/globals.css";
 
+import { Toaster } from "@/components/ui/sonner";
+
 function Options() {
   return (
     <>
@@ -23,6 +25,7 @@ function Options() {
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }

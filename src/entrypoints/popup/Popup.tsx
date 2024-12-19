@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 import "@/styles/globals.css";
 
-import { isExtensionEnabled } from "@/utils/storage";
+import { extensionOptions } from "@/utils/storage";
 import { cn } from "@/utils/utils";
 
 import extLogo from "/logo.svg";
@@ -20,17 +20,20 @@ function Popup() {
 
   useEffect(() => {
     (async () => {
-      const isEnabled = await isExtensionEnabled.getValue();
+      const isEnabled = (await extensionOptions.getValue()).enabled;
 
       setEnabled(isEnabled);
     })();
   }, []);
 
   const toggleExtension = async () => {
-    const isEnabled = await isExtensionEnabled.getValue();
+    const options = await extensionOptions.getValue();
 
-    setEnabled(!isEnabled);
-    await isExtensionEnabled.setValue(!isEnabled);
+    setEnabled(!options.enabled);
+    await extensionOptions.setValue({
+      ...options,
+      enabled: !options.enabled,
+    });
   };
 
   return (

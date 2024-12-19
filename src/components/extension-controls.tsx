@@ -1,10 +1,11 @@
 "use client";
 
-import type { DefaultOptions } from "@/types/content";
+import type { ExtensionOptions } from "@/types/content";
 
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -28,42 +29,53 @@ import { Switch } from "@/components/ui/switch";
 import { updateTabsOnSave } from "@/utils/messaging";
 
 const formSchema = z.object({
-  enableExtension: z.boolean().default(false),
+  enabled: z.boolean().default(false),
   redirectMode: z.enum(["none", "following", "messages"]).default("none"),
   blockStories: z.boolean().default(false),
   blockReels: z.boolean().default(false),
   blockExplore: z.boolean().default(false),
   blockPosts: z.union([z.boolean(), z.literal("suggested")]).default(false),
-  blockSidebar: z.union([z.boolean(), z.literal("suggested")]).default(false),
+  blockSidebar: z.union([z.boolean(), z.literal("suggested")]).default(true),
 });
 
 export function ExtensionControls() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      enableExtension: false,
-      redirectMode: "none",
-      blockStories: false,
-      blockReels: false,
-      blockExplore: false,
-      blockPosts: false,
-      blockSidebar: false,
-    },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    const extensionOptions = { ...data } as DefaultOptions;
-    // Convert "yes" and "no" to boolean values
-    extensionOptions.blockPosts =
-      extensionOptions.blockPosts === "suggested"
-        ? "suggested"
-        : Boolean(extensionOptions.blockPosts);
-    extensionOptions.blockSidebar =
-      extensionOptions.blockSidebar === "suggested"
-        ? "suggested"
-        : Boolean(extensionOptions.blockSidebar);
+  useEffect(() => {
+    (async () => {
+      const options = await extensionOptions.getValue();
 
-    browser.storage.sync.set(extensionOptions);
+      form.reset({
+        ...options,
+        blockPosts:
+          options.blockPosts === "suggested"
+            ? "suggested"
+            : Boolean(options.blockPosts),
+        blockSidebar:
+          options.blockSidebar === "suggested"
+            ? "suggested"
+            : Boolean(options.blockSidebar),
+      });
+    })();
+  }, [form]);
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const options = { ...data } as ExtensionOptions;
+    // Convert "yes" and "no" to boolean values
+    options.blockPosts =
+      options.blockPosts === "suggested"
+        ? "suggested"
+        : Boolean(options.blockPosts);
+    options.blockSidebar =
+      options.blockSidebar === "suggested"
+        ? "suggested"
+        : Boolean(options.blockSidebar);
+
+    await extensionOptions.setValue(options);
+
+    toast.success("Settings saved successfully.");
   }
 
   return (
@@ -71,7 +83,7 @@ export function ExtensionControls() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="enableExtension"
+          name="enabled"
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">

@@ -1,5 +1,12 @@
 import { storage } from "wxt/storage";
 
-export const isExtensionEnabled = storage.defineItem<boolean>("local:enabled", {
-  fallback: false,
-});
+import { defaultOptions } from "@/config/content";
+import { ExtensionOptions } from "@/types/content";
+
+export const extensionOptions = storage.defineItem<ExtensionOptions>(
+  "sync:extensionOptions",
+  {
+    fallback: defaultOptions,
+    version: 1,
+  }
+);
