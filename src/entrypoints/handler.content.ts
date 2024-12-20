@@ -1,6 +1,4 @@
-import type { ExtensionOptions as ContentSettings } from "@/types/content";
-
-import { defaultOptions, labelsArray, selectors, urls } from "@/config/content";
+import { selectors, urls } from "@/config/content";
 import { extensionConfig } from "@/config/ext";
 import { extensionOptions } from "@/utils/storage";
 
@@ -31,6 +29,7 @@ export default defineContentScript({
 
     function onMutation() {
       const path = window.location.pathname;
+      const params = window.location.search;
       const body = document.body;
 
       // Remove navigation links
@@ -40,6 +39,20 @@ export default defineContentScript({
       options.blockReels && reelsLink?.remove();
 
       if (path === urls.base) {
+        // If redirect mode is set to 'messages', skip removing other elements.
+        if (options.redirectMode === "messages") {
+          window.location.href = urls.messages;
+          return;
+        }
+
+        // If redirect mode is set to 'following', skip removing other elements.
+        if (
+          options.redirectMode === "following" &&
+          !params.includes("variant=following")
+        ) {
+          window.location.href = urls.following;
+        }
+
         // Remove stories
         const storyFeed = body?.querySelector(selectors.storyFeed);
         options.blockStories && storyFeed?.remove();

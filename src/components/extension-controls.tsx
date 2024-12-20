@@ -120,7 +120,7 @@ export function ExtensionControls() {
                   choose where to redirect when opening instagram
                 </FormDescription>
               </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select value={field.value} onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger className="!mt-0 max-w-48">
                     <SelectValue placeholder="select a redirect mode" />
@@ -224,12 +224,12 @@ export function ExtensionControls() {
                 </FormDescription>
               </div>
               <Select
+                value={String(field.value)}
                 onValueChange={(value) =>
                   field.onChange(
                     value === "true" ? true : value === "false" ? false : value
                   )
-                }
-                defaultValue={String(field.value)}>
+                }>
                 <FormControl>
                   <SelectTrigger className="!mt-0 max-w-48">
                     <SelectValue placeholder="select a block posts option" />
@@ -261,12 +261,12 @@ export function ExtensionControls() {
                 </FormDescription>
               </div>
               <Select
+                value={String(field.value)}
                 onValueChange={(value) =>
                   field.onChange(
                     value === "true" ? true : value === "false" ? false : value
                   )
-                }
-                defaultValue={String(field.value)}>
+                }>
                 <FormControl>
                   <SelectTrigger className="!mt-0 max-w-48">
                     <SelectValue placeholder="select a block sidebar option" />
