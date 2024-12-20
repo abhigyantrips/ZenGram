@@ -27,7 +27,7 @@ export default function ReloadDialog() {
                 type="rotate"
                 from="0 12 12"
                 to="360 12 12"
-                dur="5s"
+                dur="4s"
                 repeatCount="indefinite"
               />
             </linearGradient>
@@ -55,7 +55,13 @@ export default function ReloadDialog() {
       <div className="flex flex-col flex-wrap py-2">
         <h3 className="font-semibold">the settings were changed.</h3>
         <p className="text-muted-foreground">
-          please refresh the page to apply your changes.
+          please{" "}
+          <span
+            className="cursor-pointer underline underline-offset-2 hover:decoration-2"
+            onClick={() => window.location.reload()}>
+            refresh
+          </span>{" "}
+          the page to apply your changes.
         </p>
       </div>
     </div>
