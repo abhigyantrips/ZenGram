@@ -29,7 +29,9 @@ export type Selectors = {
 
 export type URLs = {
   base: string;
+  following: string;
   stories: string;
   reels: string;
   explore: string;
+  messages: string;
 };

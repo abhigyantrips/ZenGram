@@ -33,7 +33,9 @@ export const selectors: Selectors = {
 
 export const urls: URLs = {
   base: "/",
+  following: "/?variant=following",
   stories: "/stories",
   reels: "/reels",
   explore: "/explore",
+  messages: "/direct/inbox/",
 };
