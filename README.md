@@ -1,3 +1,3 @@
-# WXT + React
+# ZenGram
 
-This template should help get you started developing with React in WXT.
+A selective, mindful blocker for Instagram.
