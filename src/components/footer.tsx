@@ -14,8 +14,10 @@ export function Footer() {
               href="https://abhigyantrips.dev/">
               Abhigyan Trips
             </a>
-            .{" "}
+            .
           </span>
+        </div>
+        <div className="py-3 text-center text-sm text-muted-foreground">
           <span>
             licensed under{" "}
             <a
@@ -25,10 +27,8 @@ export function Footer() {
               href={extensionConfig.license.url}>
               {extensionConfig.license.name}
             </a>
-            .
+            .{" "}
           </span>
-        </div>
-        <div className="py-3 text-center text-sm text-muted-foreground">
           <span>
             source code on{" "}
             <a

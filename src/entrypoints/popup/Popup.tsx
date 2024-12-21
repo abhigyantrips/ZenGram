@@ -34,6 +34,8 @@ function Popup() {
       ...options,
       enabled: !options.enabled,
     });
+
+    updateTabsOnSave();
   };
 
   return (
