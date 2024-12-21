@@ -4,7 +4,7 @@ export type ExtensionOptions = {
   blockStories: boolean;
   blockReels: boolean;
   blockExplore: boolean;
-  blockPosts: boolean | "suggested";
+  blockPosts: boolean;
   blockSidebar: boolean | "suggested";
 };
 

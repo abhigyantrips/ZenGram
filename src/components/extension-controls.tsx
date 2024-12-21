@@ -34,7 +34,7 @@ const formSchema = z.object({
   blockStories: z.boolean().default(false),
   blockReels: z.boolean().default(false),
   blockExplore: z.boolean().default(false),
-  blockPosts: z.union([z.boolean(), z.literal("suggested")]).default(false),
+  blockPosts: z.boolean().default(false),
   blockSidebar: z.union([z.boolean(), z.literal("suggested")]).default(true),
 });
 
@@ -49,10 +49,6 @@ export function ExtensionControls() {
 
       form.reset({
         ...options,
-        blockPosts:
-          options.blockPosts === "suggested"
-            ? "suggested"
-            : Boolean(options.blockPosts),
         blockSidebar:
           options.blockSidebar === "suggested"
             ? "suggested"
@@ -64,10 +60,6 @@ export function ExtensionControls() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const options = { ...data } as ExtensionOptions;
     // Convert "yes" and "no" to boolean values
-    options.blockPosts =
-      options.blockPosts === "suggested"
-        ? "suggested"
-        : Boolean(options.blockPosts);
     options.blockSidebar =
       options.blockSidebar === "suggested"
         ? "suggested"
@@ -223,26 +215,13 @@ export function ExtensionControls() {
                   control which posts appear in your feed
                 </FormDescription>
               </div>
-              <Select
-                value={String(field.value)}
-                onValueChange={(value) =>
-                  field.onChange(
-                    value === "true" ? true : value === "false" ? false : value
-                  )
-                }>
-                <FormControl>
-                  <SelectTrigger className="!mt-0 max-w-48">
-                    <SelectValue placeholder="select a block posts option" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="true">yes</SelectItem>
-                  <SelectItem value="false">no</SelectItem>
-                  <SelectItem value="suggested">
-                    suggested posts only
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <Switch
+                  className="!mt-0"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
             </FormItem>
           )}
         />

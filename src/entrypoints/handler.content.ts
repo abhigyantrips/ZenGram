@@ -58,28 +58,12 @@ export default defineContentScript({
         options.blockStories && storyFeed?.remove();
 
         // Remove posts
-        const posts = body?.querySelector(selectors.posts.base);
-        const postsLoader = body?.querySelector(selectors.posts.loader);
-        const postsContainer = posts?.closest("div");
         if (options.blockPosts === true) {
+          const posts = body?.querySelector(selectors.posts.base);
+          const postsLoader = body?.querySelector(selectors.posts.loader);
+          const postsContainer = posts?.closest("div");
           postsContainer?.remove();
           postsLoader?.remove();
-        } else if (options.blockPosts === "suggested") {
-          const allCaughtUp = Array.from(
-            document.querySelectorAll("span")
-          ).find((el) => el.innerText?.includes("You're all caught up"));
-          if (allCaughtUp) {
-            const container = allCaughtUp.closest("div");
-            let sibling = container?.nextElementSibling;
-            while (sibling) {
-              sibling.remove();
-              sibling = container?.nextElementSibling;
-            }
-            const infoDiv = document.createElement("div");
-            infoDiv.textContent =
-              "Any further suggested posts have been blocked by ZenGram";
-            container?.parentElement?.appendChild(infoDiv);
-          }
         }
 
         // Remove sidebar / suggested followers

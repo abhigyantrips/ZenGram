@@ -6,7 +6,7 @@ export const defaultOptions: ExtensionOptions = {
   blockStories: false,
   blockReels: true,
   blockExplore: true,
-  blockPosts: "suggested",
+  blockPosts: false,
   blockSidebar: true,
 };
 
