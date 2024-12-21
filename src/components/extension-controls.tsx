@@ -83,7 +83,7 @@ export function ExtensionControls() {
                   enable extension
                 </FormLabel>
                 <FormDescription>
-                  turn the instagram control extension on or off
+                  turn the Instagram control extension on or off
                 </FormDescription>
               </div>
               <FormControl>
@@ -109,7 +109,7 @@ export function ExtensionControls() {
                   redirect mode
                 </FormLabel>
                 <FormDescription>
-                  choose where to redirect when opening instagram
+                  choose where to redirect when opening Instagram
                 </FormDescription>
               </div>
               <Select value={field.value} onValueChange={field.onChange}>
@@ -164,7 +164,7 @@ export function ExtensionControls() {
                   block reels
                 </FormLabel>
                 <FormDescription>
-                  remove reels from your instagram experience
+                  remove reels from your Instagram experience
                 </FormDescription>
               </div>
               <FormControl>
