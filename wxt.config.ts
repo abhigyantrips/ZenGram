@@ -11,7 +11,7 @@ export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
 
   manifest: {
-    name: "ZenGram",
+    name: "ZenGram: Mindful Instagram, Your Way",
     permissions: ["storage"],
     host_permissions: ["*://www.instagram.com/*"],
     browser_specific_settings: {
