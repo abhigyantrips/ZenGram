@@ -1,7 +1,6 @@
 import "@/styles/globals.css";
 
 import ReactDOM from "react-dom/client";
-import { ShadowRootContentScriptUi } from "wxt/client";
 
 import ReloadDialog from "@/components/reload-dialog";
 
@@ -21,6 +20,8 @@ export default defineContentScript({
               position: "inline",
               anchor: "body",
               append: "first",
+              inheritStyles: true,
+
               onMount: (container) => {
                 const app = document.createElement("div");
                 container.append(app);

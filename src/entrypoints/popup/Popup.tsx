@@ -4,12 +4,11 @@ import { Bolt } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
-import "tailwindcss-animate";
-
 import { Button } from "@/components/ui/button";
 
 import "@/styles/globals.css";
 
+import { updateTabsOnSave } from "@/utils/messaging";
 import { extensionOptions } from "@/utils/storage";
 import { cn } from "@/utils/utils";
 
@@ -40,8 +39,8 @@ function Popup() {
 
   return (
     <>
-      <div className="flex min-h-[200px] w-[300px] flex-col items-center bg-background p-2">
-        <div className="absolute right-2 top-2">
+      <div className="bg-background flex min-h-[200px] w-[300px] flex-col items-center p-2">
+        <div className="absolute top-2 right-2">
           <Button
             size="icon"
             variant="ghost"
@@ -49,7 +48,7 @@ function Popup() {
             <Bolt />
           </Button>
         </div>
-        <div className="flex flex-col items-center justify-center space-y-2 px-2 py-4 text-foreground">
+        <div className="text-foreground flex flex-col items-center justify-center space-y-2 px-2 py-4">
           <img
             src={extLogo}
             className={cn(
