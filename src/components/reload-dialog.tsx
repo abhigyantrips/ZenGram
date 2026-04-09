@@ -1,6 +1,6 @@
 export default function ReloadDialog() {
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex max-w-xs items-start rounded-lg border bg-background/80 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/75">
+    <div className="bg-background/80 supports-[backdrop-filter]:bg-background/75 fixed right-4 bottom-4 z-50 flex max-w-xs items-start rounded-lg border shadow-lg backdrop-blur">
       <div className="p-2">
         <svg
           className="size-20"
@@ -52,9 +52,9 @@ export default function ReloadDialog() {
             mask="url(#path-mask)"></rect>
         </svg>
       </div>
-      <div className="flex flex-col flex-wrap py-2">
+      <div className="flex flex-col flex-wrap py-2 pr-2">
         <h3 className="font-semibold">the settings were changed.</h3>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           please{" "}
           <span
             className="cursor-pointer underline underline-offset-2 hover:decoration-2"

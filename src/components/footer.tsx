@@ -3,27 +3,27 @@ import { extensionConfig } from "@/config/ext";
 export function Footer() {
   return (
     <footer className="flex h-16 w-full border-t px-6 py-0">
-      <div className="container flex w-full flex-1 flex-col items-center justify-between md:flex-row">
-        <div className="py-3 text-center text-sm text-muted-foreground">
+      <div className="container mx-auto flex w-full flex-1 flex-col items-center justify-between md:flex-row">
+        <div className="text-muted-foreground py-3 text-center text-sm">
           <span>
             created by{" "}
             <a
               rel="noopener noreferrer"
               target="_blank"
-              className="underline underline-offset-2 transition-colors duration-150 hover:text-foreground"
+              className="hover:text-foreground underline underline-offset-2 transition-colors duration-150"
               href="https://abhigyantrips.dev/">
               Abhigyan Trips
             </a>
             .
           </span>
         </div>
-        <div className="py-3 text-center text-sm text-muted-foreground">
+        <div className="text-muted-foreground py-3 text-center text-sm">
           <span>
             licensed under{" "}
             <a
               rel="noopener noreferrer"
               target="_blank"
-              className="underline underline-offset-2 transition-colors duration-150 hover:text-foreground"
+              className="hover:text-foreground underline underline-offset-2 transition-colors duration-150"
               href={extensionConfig.license.url}>
               {extensionConfig.license.name}
             </a>
@@ -34,7 +34,7 @@ export function Footer() {
             <a
               rel="noopener noreferrer"
               target="_blank"
-              className="underline underline-offset-2 transition-colors duration-150 hover:text-foreground"
+              className="hover:text-foreground underline underline-offset-2 transition-colors duration-150"
               href={extensionConfig.source}>
               GitHub
             </a>

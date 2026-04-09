@@ -2,21 +2,22 @@
 
 import type { ExtensionOptions } from "@/types/content";
 
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v3";
 
 import { Button } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -27,20 +28,30 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { updateTabsOnSave } from "@/utils/messaging";
+import { extensionOptions } from "@/utils/storage";
 
 const formSchema = z.object({
-  enabled: z.boolean().default(false),
-  redirectMode: z.enum(["none", "following", "messages"]).default("none"),
-  blockStories: z.boolean().default(false),
-  blockReels: z.boolean().default(false),
-  blockExplore: z.boolean().default(false),
-  blockPosts: z.boolean().default(false),
-  blockSidebar: z.union([z.boolean(), z.literal("suggested")]).default(true),
+  enabled: z.boolean(),
+  redirectMode: z.enum(["none", "following", "messages"]),
+  blockStories: z.boolean(),
+  blockReels: z.boolean(),
+  blockExplore: z.boolean(),
+  blockPosts: z.boolean(),
+  blockSidebar: z.union([z.boolean(), z.literal("suggested")]),
 });
 
 export function ExtensionControls() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      enabled: false,
+      redirectMode: "none",
+      blockStories: false,
+      blockReels: false,
+      blockExplore: false,
+      blockPosts: false,
+      blockSidebar: true,
+    },
   });
 
   useEffect(() => {
@@ -71,53 +82,73 @@ export function ExtensionControls() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <FieldGroup className="gap-4">
+        <Controller
           control={form.control}
           name="enabled"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="enabled"
+                  className="text-base font-semibold">
                   enable extension
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   turn the Instagram control extension on or off
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  className="!mt-0"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Switch
+                id="enabled"
+                name={field.name}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-invalid={fieldState.invalid}
+              />
+            </Field>
           )}
         />
 
         <Separator />
 
-        <FormField
+        <Controller
           control={form.control}
           name="redirectMode"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="redirectMode"
+                  className="text-base font-semibold">
                   redirect mode
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   choose where to redirect when opening Instagram
-                </FormDescription>
-              </div>
-              <Select value={field.value} onValueChange={field.onChange}>
-                <FormControl>
-                  <SelectTrigger className="!mt-0 max-w-48">
-                    <SelectValue placeholder="select a redirect mode" />
-                  </SelectTrigger>
-                </FormControl>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Select
+                name={field.name}
+                value={field.value}
+                onValueChange={field.onChange}>
+                <SelectTrigger
+                  id="redirectMode"
+                  aria-invalid={fieldState.invalid}
+                  className="max-w-48">
+                  <SelectValue placeholder="select a redirect mode" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">none</SelectItem>
                   <SelectItem value="following">
@@ -126,131 +157,173 @@ export function ExtensionControls() {
                   <SelectItem value="messages">redirect to messages</SelectItem>
                 </SelectContent>
               </Select>
-            </FormItem>
+            </Field>
           )}
         />
 
-        <FormField
+        <Controller
           control={form.control}
           name="blockStories"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="blockStories"
+                  className="text-base font-semibold">
                   block stories
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   prevent stories from loading in your feed
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  className="!mt-0"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Switch
+                id="blockStories"
+                name={field.name}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-invalid={fieldState.invalid}
+              />
+            </Field>
           )}
         />
 
-        <FormField
+        <Controller
           control={form.control}
           name="blockReels"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="blockReels"
+                  className="text-base font-semibold">
                   block reels
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   remove reels from your Instagram experience
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  className="!mt-0"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Switch
+                id="blockReels"
+                name={field.name}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-invalid={fieldState.invalid}
+              />
+            </Field>
           )}
         />
 
-        <FormField
+        <Controller
           control={form.control}
           name="blockExplore"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="blockExplore"
+                  className="text-base font-semibold">
                   block explore
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   disable access to the explore page
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  className="!mt-0"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Switch
+                id="blockExplore"
+                name={field.name}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-invalid={fieldState.invalid}
+              />
+            </Field>
           )}
         />
 
-        <FormField
+        <Controller
           control={form.control}
           name="blockPosts"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="blockPosts"
+                  className="text-base font-semibold">
                   block posts
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   control which posts appear in your feed
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  className="!mt-0"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
+              <Switch
+                id="blockPosts"
+                name={field.name}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-invalid={fieldState.invalid}
+              />
+            </Field>
           )}
         />
 
-        <FormField
+        <Controller
           control={form.control}
           name="blockSidebar"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base font-semibold">
+          render={({ field, fieldState }) => (
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="bg-card rounded-2xl p-4">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor="blockSidebar"
+                  className="text-base font-semibold">
                   block sidebar
-                </FormLabel>
-                <FormDescription>
+                </FieldLabel>
+                <FieldDescription>
                   customize the visibility of the sidebar content
-                </FormDescription>
-              </div>
+                </FieldDescription>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </FieldContent>
               <Select
+                name={field.name}
                 value={String(field.value)}
                 onValueChange={(value) =>
                   field.onChange(
                     value === "true" ? true : value === "false" ? false : value
                   )
                 }>
-                <FormControl>
-                  <SelectTrigger className="!mt-0 max-w-48">
-                    <SelectValue placeholder="select a block sidebar option" />
-                  </SelectTrigger>
-                </FormControl>
+                <SelectTrigger
+                  id="blockSidebar"
+                  aria-invalid={fieldState.invalid}
+                  className="max-w-48">
+                  <SelectValue placeholder="select a block sidebar option" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="true">yes</SelectItem>
                   <SelectItem value="false">no</SelectItem>
@@ -259,20 +332,19 @@ export function ExtensionControls() {
                   </SelectItem>
                 </SelectContent>
               </Select>
-            </FormItem>
+            </Field>
           )}
         />
+      </FieldGroup>
 
-        <div className="justify-end">
-          <Button
-            onClick={() => updateTabsOnSave()}
-            type="submit"
-            variant="secondary"
-            className="w-fit">
-            save settings
-          </Button>
-        </div>
-      </form>
-    </Form>
+      <div className="justify-end">
+        <Button
+          onClick={() => updateTabsOnSave()}
+          type="submit"
+          className="w-fit">
+          save settings
+        </Button>
+      </div>
+    </form>
   );
 }
