@@ -2,6 +2,12 @@ import { selectors, urls } from "@/config/content";
 import { extensionConfig } from "@/config/ext";
 import { extensionOptions } from "@/utils/storage";
 
+function hideElement(el: Element | null | undefined) {
+  if (el instanceof HTMLElement) {
+    el.style.display = "none";
+  }
+}
+
 export default defineContentScript({
   matches: ["*://www.instagram.com/*"],
   runAt: "document_start",
@@ -32,20 +38,18 @@ export default defineContentScript({
       const params = window.location.search;
       const body = document.body;
 
-      // Remove navigation links
+      // Hide navigation links
       const exploreLink = body?.querySelector(selectors.nav.explore);
       const reelsLink = body?.querySelector(selectors.nav.reels);
-      options.blockExplore && exploreLink?.remove();
-      options.blockReels && reelsLink?.remove();
+      options.blockExplore && hideElement(exploreLink);
+      options.blockReels && hideElement(reelsLink);
 
       if (path === urls.base) {
-        // If redirect mode is set to 'messages', skip removing other elements.
         if (options.redirectMode === "messages") {
           window.location.href = urls.messages;
           return;
         }
 
-        // If redirect mode is set to 'following', skip removing other elements.
         if (
           options.redirectMode === "following" &&
           !params.includes("variant=following")
@@ -53,24 +57,24 @@ export default defineContentScript({
           window.location.href = urls.following;
         }
 
-        // Remove stories
+        // Hide stories
         const storyFeed = body?.querySelector(selectors.storyFeed);
-        options.blockStories && storyFeed?.remove();
+        options.blockStories && hideElement(storyFeed);
 
-        // Remove posts
+        // Hide posts
         if (options.blockPosts === true) {
           const posts = body?.querySelector(selectors.posts.base);
           const postsLoader = body?.querySelector(selectors.posts.loader);
           const postsContainer = posts?.closest("div");
-          postsContainer?.remove();
-          postsLoader?.remove();
+          hideElement(postsContainer);
+          hideElement(postsLoader);
         }
 
-        // Remove sidebar / suggested followers
+        // Hide sidebar / suggested followers
         if (options.blockSidebar === true) {
           const sidebarBase = body?.querySelector(selectors.sidebar.base);
           const sidebar = sidebarBase?.nextElementSibling;
-          sidebar?.remove();
+          hideElement(sidebar);
         } else if (options.blockSidebar === "suggested") {
           const suggestedFollowersLink = body?.querySelector(
             selectors.sidebar.suggestedFollowers
@@ -79,24 +83,24 @@ export default defineContentScript({
             suggestedFollowersLink?.closest("div");
           const suggestedFollowers =
             suggestedFollowersTitle?.nextElementSibling;
-          suggestedFollowers?.remove();
-          suggestedFollowersTitle?.remove();
+          hideElement(suggestedFollowers);
+          hideElement(suggestedFollowersTitle);
         }
       }
 
       if (path.includes(urls.reels) && options.blockReels) {
         const main = body?.querySelector(selectors.main);
-        main?.remove();
+        hideElement(main);
       }
 
       if (path.includes(urls.explore) && options.blockExplore) {
         const main = body?.querySelector(selectors.main);
-        main?.remove();
+        hideElement(main);
       }
 
       if (path.includes(urls.stories) && options.blockStories) {
         const storiesSection = body?.querySelector("section");
-        storiesSection?.remove();
+        hideElement(storiesSection);
       }
     }
   },
