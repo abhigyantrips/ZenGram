@@ -1,3 +1,3 @@
-# ZenGram
+# ZenGram: Mindful Instagram, Your Way
 
-A selective, mindful blocker for Instagram.
+This is a selective blocker for Instagram.
