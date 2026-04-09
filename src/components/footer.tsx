@@ -11,7 +11,7 @@ export function Footer() {
               rel="noopener noreferrer"
               target="_blank"
               className="hover:text-foreground underline underline-offset-2 transition-colors duration-150"
-              href="https://abhigyantrips.dev/">
+              href="https://abhi.now/">
               Abhigyan Trips
             </a>
             .

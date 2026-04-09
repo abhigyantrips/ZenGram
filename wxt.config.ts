@@ -15,7 +15,7 @@ export default defineConfig({
     host_permissions: ["*://www.instagram.com/*"],
     browser_specific_settings: {
       gecko: {
-        id: "zengram@abhigyantrips.dev",
+        id: "zengram@abhi.now",
       },
     },
   },
